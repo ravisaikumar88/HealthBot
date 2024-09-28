@@ -1,7 +1,8 @@
 import streamlit as st
 import requests
+#using the concept of decision-tree
 
-# Function to get coordinates of the city
+ 
 def get_coordinates(city_name):
     url = f"https://nominatim.openstreetmap.org/search?q={city_name}&format=json"
     headers = {
@@ -18,9 +19,8 @@ def get_coordinates(city_name):
     else:
         st.error(f"Error: {response.status_code} {response.text}")
         return None
-
-# Function to find hospitals near the specified city
-def find_hospitals(city_name, radius=5000, max_results=7, name_filter=None):
+ 
+def find_hospitals(city_name, radius=5000, max_results=5, name_filter=None):
     coordinates = get_coordinates(city_name)
     if coordinates:
         lat, lon = coordinates
@@ -41,11 +41,9 @@ def find_hospitals(city_name, radius=5000, max_results=7, name_filter=None):
             filtered_hospitals = []
             for hospital in hospitals:
                 name = hospital.get('tags', {}).get('name', 'N/A')
-                phone = hospital.get('tags', {}).get('phone', 'N/A')  # Get the phone number
                 if name_filter and name_filter.lower() not in name.lower():
                     continue
-                filtered_hospitals.append({'name': name, 'lat': hospital.get('lat', 'N/A'), 
-                                            'lon': hospital.get('lon', 'N/A'), 'phone': phone})
+                filtered_hospitals.append(hospital)
                 if len(filtered_hospitals) >= max_results:
                     break
             return filtered_hospitals
@@ -54,21 +52,20 @@ def find_hospitals(city_name, radius=5000, max_results=7, name_filter=None):
             return []
     else:
         return []
-
-# Streamlit app interface
+ 
 st.title("Hospital Finder")
 city_name = st.text_input("Enter the city name:")
 name_filter = st.text_input("Enter a name filter (optional):")
-
+ 
 if st.button("Find Hospitals"):
     hospitals = find_hospitals(city_name, name_filter=name_filter)
     if hospitals:
         st.write(f"Found {len(hospitals)} hospitals:")
         for hospital in hospitals:
-            name = hospital['name']
+            name = hospital.get('tags', {}).get('name', 'N/A')
             lat = hospital['lat']
             lon = hospital['lon']
-            phone = hospital['phone']
-            st.write(f"Name: {name}, Phone: {phone}, Lat: {lat}, Lon: {lon}")
+            st.write(f"Name: {name}, Lat: {lat}, Lon: {lon}")
     else:
         st.write("No hospitals found.")
+
