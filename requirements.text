@@ -7,3 +7,4 @@ requests
 geopy  # For geolocation support
 transformers
 torch
+sentence-transformers
