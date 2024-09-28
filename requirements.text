@@ -4,7 +4,6 @@ langchain
 pandas
 numpy
 requests
-geopy  # For geolocation support
+geopy
 transformers
 torch
-sentence-transformers
