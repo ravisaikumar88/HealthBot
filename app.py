@@ -12,7 +12,7 @@ if user_input:
     st.write("Analyzing your symptoms...")
     # Here, we will add the response logic later
 
-
+from sentence_transformers import SentenceTransformer
 # Load a pre-trained model for sentence embeddings
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
