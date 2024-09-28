@@ -1,0 +1,9 @@
+streamlit
+sentence-transformers
+langchain
+pandas
+numpy
+requests
+geopy  # For geolocation support
+transformers
+torch
